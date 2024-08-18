@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic-Airplane Survival Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Survival Prediction</h1>
+        <label for="pclass">Passenger Class (Pclass):</label>
+        <input type="number" id="pclass" placeholder="1, 2, or 3">
+
+        <label for="sex">Sex (0 = Male, 1 = Female):</label>
+        <input type="number" id="sex" placeholder="0 or 1">
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter Age">
+
+        <label for="safety_score">Safety Score:</label>
+        <input type="number" id="safety_score" placeholder="Enter Safety Score">
+
+        <button onclick="predictSurvival()">Predict Survival</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function predictSurvival() {
+            const pclass = document.getElementById('pclass').value;
+            const sex = document.getElementById('sex').value;
+            const age = document.getElementById('age').value;
+            const safetyScore = document.getElementById('safety_score').value;
+
+            const data = {
+                features: [pclass, sex, age, safetyScore]
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.prediction === 1) {
+                    resultDiv.textContent = 'Prediction: Survived';
+                    resultDiv.style.color = 'green';
+                } else {
+                    resultDiv.textContent = 'Prediction: Did Not Survive';
+                    resultDiv.style.color = 'red';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
