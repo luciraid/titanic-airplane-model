@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import joblib
 
 app = Flask(__name__)
@@ -8,7 +8,7 @@ model = joblib.load('titanic_airplane_model.pkl')
 
 @app.route('/')
 def home():
-    return "Titanic-Airplane Survival Prediction API"
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
