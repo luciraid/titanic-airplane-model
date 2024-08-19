@@ -1,21 +1,10 @@
-from flask import Flask, request, jsonify, render_template
-import joblib
+from flask import Flask
 
 app = Flask(__name__)
 
-# Load the model
-model = joblib.load('titanic_airplane_model.pkl')
-
 @app.route('/')
 def home():
-    return render_template('index.html')
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.json  # Get the data from the POST request
-    prediction = model.predict([data['features']])
-    return jsonify({'prediction': int(prediction[0])})
+    return "Hello, Render!"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
